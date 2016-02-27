@@ -1,7 +1,7 @@
 package com.github.hasys;
 
-import static java.lang.Character.*;
-import static java.nio.charset.StandardCharsets.*;
+import static java.lang.Character.isWhitespace;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.IOException;
 import java.net.URI;
@@ -32,12 +32,13 @@ public class JsonParser {
                     String.format("Unexpected token %s at position %s", currentToken(), currentPosition)
             );
         }
+
         currentPosition++;
 
-        if (parseNextToken() == JsonToken.END_OBJECT && currentPosition == data.length()-1) {
+        if (parseNextToken() == JsonToken.END_OBJECT && currentPosition == data.length() - 1) {
             return JsonObject.EMPTY;
         } else {
-            throw new IllegalArgumentException(data + System.lineSeparator() +" is not a valid json object");
+            throw new IllegalArgumentException(data + System.lineSeparator() + " is not a valid json object");
         }
     }
 
