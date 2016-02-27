@@ -12,7 +12,7 @@ jdk:
   - openjdk7
   - openjdk8
 
-mvn install
+install: mvn install
 
 branches:
   only:
