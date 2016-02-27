@@ -1,0 +1,19 @@
+language: java
+
+sudo: false
+
+os: linux
+
+jdk:
+  - oraclejdk6
+  - oraclejdk7
+  - oraclejdk8
+  - openjdk6
+  - openjdk7
+  - openjdk8
+
+mvn install
+
+branches:
+  only:
+    - 0.1
