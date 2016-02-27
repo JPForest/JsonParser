@@ -2,6 +2,10 @@ package com.github.hasys;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.junit.Test;
 
 public class JsonParseTest {
@@ -9,11 +13,6 @@ public class JsonParseTest {
     @Test(expected = IllegalArgumentException.class)
     public void emptyStringTest() {
         new JsonParser("").parse();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void nullStringTest() {
-        new JsonParser(null).parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -58,5 +57,12 @@ public class JsonParseTest {
         assertEquals(new JsonParser("\n{}").parse(), JsonObject.EMPTY);
         assertEquals(new JsonParser("\r\n{}").parse(), JsonObject.EMPTY);
         assertEquals(new JsonParser(" \t\r\n{ \r\n\t} \t\r\n").parse(), JsonObject.EMPTY);
+    }
+
+    @Test
+    public void emptyObjectFromFileTest() throws IOException, URISyntaxException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        URI fileUri = classLoader.getResource("emptyObject.json").toURI();
+        assertEquals(new JsonParser(fileUri).parse(), JsonObject.EMPTY);
     }
 }

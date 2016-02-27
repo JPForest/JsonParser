@@ -1,6 +1,12 @@
 package com.github.hasys;
 
-import static java.lang.Character.isWhitespace;
+import static java.lang.Character.*;
+import static java.nio.charset.StandardCharsets.*;
+
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class JsonParser {
 
@@ -8,11 +14,11 @@ public class JsonParser {
     private final String data;
 
     public JsonParser(String data) {
-        if (data == null) {
-            throw new IllegalArgumentException("Json string can not be null");
-        }
-
         this.data = data.trim();
+    }
+
+    public JsonParser(URI pathToFile) throws IOException {
+        this.data = new String(Files.readAllBytes(Paths.get(pathToFile)), UTF_8).trim();
     }
 
     public JsonObject parse() {
