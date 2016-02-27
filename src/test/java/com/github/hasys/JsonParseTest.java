@@ -8,12 +8,12 @@ public class JsonParseTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void emptyStringTest() {
-        assertEquals(new JsonParser("").parse(), JsonObject.EMPTY);
+        new JsonParser("").parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullStringTest() {
-        assertEquals(new JsonParser(null).parse(), JsonObject.EMPTY);
+        new JsonParser(null).parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
