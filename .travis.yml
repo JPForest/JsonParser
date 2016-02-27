@@ -12,8 +12,4 @@ jdk:
   - openjdk7
   - openjdk8
 
-branches:
-  only:
-    - 0.1
-
-install: mvn install
+script: "mvn verify"
