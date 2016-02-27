@@ -6,7 +6,7 @@
 
   <groupId>com.github.hasys</groupId>
   <artifactId>JsonPars</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1.0-RELEASE</version>
 
   <build>
     <plugins>
