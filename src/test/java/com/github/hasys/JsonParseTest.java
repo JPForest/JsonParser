@@ -8,45 +8,55 @@ public class JsonParseTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void emptyStringTest() {
-        assertEquals(JsonParser.parse(""), JsonObject.EMPTY);
+        assertEquals(new JsonParser("").parse(), JsonObject.EMPTY);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullStringTest() {
-        assertEquals(JsonParser.parse(null), JsonObject.EMPTY);
+        assertEquals(new JsonParser(null).parse(), JsonObject.EMPTY);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void incorrectObjectTest() {
-        JsonParser.parse("{");
+        new JsonParser("{").parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void incorrectObject2Test() {
-        JsonParser.parse("  { { } ");
+        new JsonParser("}").parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void incorrectObject3Test() {
-        JsonParser.parse("  { } } ");
+        new JsonParser("  { { } ").parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void incorrectObject4Test() {
-        JsonParser.parse("{ {  }  }   ");
+        new JsonParser("  { } } ").parse();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void incorrectObject5Test() {
+        new JsonParser("{ {  }  }   ").parse();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void incorrectObject6Test() {
+        new JsonParser("{ 0").parse();
     }
 
     @Test
     public void emptyObjectTest() {
-        assertEquals(JsonParser.parse("{}"), JsonObject.EMPTY);
+        assertEquals(new JsonParser("{}").parse(), JsonObject.EMPTY);
     }
 
     @Test
     public void whiteSpacedObjectTest() {
-        assertEquals(JsonParser.parse(" {}"), JsonObject.EMPTY);
-        assertEquals(JsonParser.parse("\t{}"), JsonObject.EMPTY);
-        assertEquals(JsonParser.parse("\n{}"), JsonObject.EMPTY);
-        assertEquals(JsonParser.parse("\r\n{}"), JsonObject.EMPTY);
-        assertEquals(JsonParser.parse(" \t\r\n{ \r\n\t} \t\r\n"), JsonObject.EMPTY);
+        assertEquals(new JsonParser(" {}").parse(), JsonObject.EMPTY);
+        assertEquals(new JsonParser("\t{}").parse(), JsonObject.EMPTY);
+        assertEquals(new JsonParser("\n{}").parse(), JsonObject.EMPTY);
+        assertEquals(new JsonParser("\r\n{}").parse(), JsonObject.EMPTY);
+        assertEquals(new JsonParser(" \t\r\n{ \r\n\t} \t\r\n").parse(), JsonObject.EMPTY);
     }
 }
