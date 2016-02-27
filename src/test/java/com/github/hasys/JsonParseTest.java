@@ -20,4 +20,9 @@ public class JsonParseTest {
     public void emptyObjectTest() {
         assertEquals(JsonParser.parse("{}"), JsonObject.EMPTY);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void incorrectObjectTest() {
+        JsonParser.parse("{");
+    }
 }

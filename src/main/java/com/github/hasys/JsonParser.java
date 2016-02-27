@@ -7,6 +7,10 @@ public class JsonParser {
             throw new IllegalArgumentException("Json string can not to be null or empty");
         }
 
+        if (!data.equals("{}")) {
+            throw new IllegalArgumentException("Json string is not a valid json");
+        }
+
         return JsonObject.EMPTY;
     }
 }
