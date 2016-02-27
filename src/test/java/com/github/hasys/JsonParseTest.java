@@ -6,10 +6,18 @@ import org.junit.Test;
 
 public class JsonParseTest {
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void emptyStringTest() {
-        assertEquals(JsonParser.parse("{}"), JsonObject.EMPTY);
         assertEquals(JsonParser.parse(""), JsonObject.EMPTY);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullStringTest() {
         assertEquals(JsonParser.parse(null), JsonObject.EMPTY);
+    }
+
+    @Test
+    public void emptyObjectTest() {
+        assertEquals(JsonParser.parse("{}"), JsonObject.EMPTY);
     }
 }
