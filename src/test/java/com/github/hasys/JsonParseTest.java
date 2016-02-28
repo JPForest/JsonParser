@@ -11,86 +11,82 @@ import org.junit.Test;
 public class JsonParseTest {
 
     @Test(expected = IllegalArgumentException.class)
-    public void emptyStringTest() {
+    public void testEmptyString() {
         new JsonParser("").parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void incorrectObjectTest() {
+    public void testOnlyOpeningCurlyBrace() {
         new JsonParser("{").parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void incorrectObject2Test() {
+    public void testOnlyClosingCurlyBrace() {
         new JsonParser("}").parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void incorrectObject3Test() {
+    public void testExcessOpeningCurlyBrace() {
         new JsonParser("  { { } ").parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void incorrectObject4Test() {
+    public void testExcessClosingCurlyBrace() {
         new JsonParser("  { } } ").parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void incorrectObject5Test() {
+    public void testIncorrectNotationObjectInsideObject() {
         new JsonParser("{ {  }  }   ").parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void incorrectObject6Test() {
+    public void testObjectWithoutEncloseCurlyBracket() {
         new JsonParser("{ 0").parse();
     }
 
     @Test
-    public void emptyObjectTest() {
-        assertEquals(new JsonParser("{}").parse(), JsonObject.EMPTY);
+    public void testEmptyObject() {
+        assertEquals(JsonObject.EMPTY, new JsonParser("{}").parse());
     }
 
     @Test
-    public void whiteSpacedObjectTest() {
-        assertEquals(new JsonParser(" {}").parse(), JsonObject.EMPTY);
-        assertEquals(new JsonParser("\t{}").parse(), JsonObject.EMPTY);
-        assertEquals(new JsonParser("\n{}").parse(), JsonObject.EMPTY);
-        assertEquals(new JsonParser("\r\n{}").parse(), JsonObject.EMPTY);
-        assertEquals(new JsonParser(" \t\r\n{ \r\n\t} \t\r\n").parse(), JsonObject.EMPTY);
+    public void testWhiteSpacedObject() {
+        assertEquals(JsonObject.EMPTY, new JsonParser(" \t\r\n{ \r\n\t} \t\r\n").parse());
     }
 
     @Test
-    public void emptyObjectFromFileTest() throws IOException, URISyntaxException {
+    public void testEmptyObjectFromFile() throws IOException, URISyntaxException {
         ClassLoader classLoader = getClass().getClassLoader();
         URI fileUri = classLoader.getResource("emptyObject.json").toURI();
-        assertEquals(new JsonParser(fileUri).parse(), JsonObject.EMPTY);
+        assertEquals(JsonObject.EMPTY, new JsonParser(fileUri).parse());
     }
 
     @Test
-    public void objectWithEmptyObjectValueTest() {
+    public void testObjectWithEmptyObjectValue() {
         JsonParser jsonParser = new JsonParser("{ \"first\": {} }");
         JsonObject jsonObject = jsonParser.parse();
         assertEquals(jsonObject.getValuesCount(), 1);
-        assertEquals(jsonObject.getValueByName("first"), JsonObject.EMPTY);
+        assertEquals(JsonObject.EMPTY, jsonObject.getValueByName("first"));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void objectWithWrongValueTest() {
+    public void testMemberWithoutValue() {
         new JsonParser("{ \"first\": } }").parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void objectWithWrongValue2Test() {
+    public void testMemberWithoutColon() {
         new JsonParser("{ \"first\" {} }").parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void objectWithWrongValue3Test() {
+    public void testMemberWithWrongString() {
         new JsonParser("{ first: {} }").parse();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void objectWithWrongValue4Test() {
+    public void testWrongInvocationOfParseStringMethod() {
         new JsonParser("first").parseString();
     }
 
