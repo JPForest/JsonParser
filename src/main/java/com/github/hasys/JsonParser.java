@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class JsonParser {
 
@@ -72,7 +73,16 @@ public class JsonParser {
     }
 
     private Object parseValue() {
-        return parseObject();
+        switch (parseNextToken()) {
+            case START_OBJECT:
+                return parseObject();
+            case STRING:
+                return parseString();
+            default:
+                throw new IllegalArgumentException(
+                        unexpectedTokenPresentExpected(JsonToken.START_OBJECT, JsonToken.STRING)
+                );
+        }
     }
 
     private JsonToken parseNextToken() {
@@ -131,8 +141,8 @@ public class JsonParser {
         return String.format("Unknown token '%s' at position %s", data.charAt(currentPosition), currentPosition);
     }
 
-    private String unexpectedTokenPresentExpected(JsonToken expectedToken) {
-        return String.format("Unexpected token '%s' at position %s. Expected: '%s'.",
-                currentToken(), currentPosition, expectedToken);
+    private String unexpectedTokenPresentExpected(JsonToken... expectedToken) {
+        return String.format("Unexpected token '%s' at position %s. Expected one of '%s'.",
+                currentToken(), currentPosition, Arrays.toString(expectedToken));
     }
 }

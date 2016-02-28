@@ -70,6 +70,38 @@ public class JsonParseTest {
         assertEquals(JsonObject.EMPTY, jsonObject.getValueByName("first"));
     }
 
+    @Test
+    public void testNestingLevels() throws IOException, URISyntaxException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        URI fileUri = classLoader.getResource("nestedObjects.json").toURI();
+
+        JsonParser jsonParser = new JsonParser(fileUri);
+        JsonObject jsonObject = jsonParser.parse();
+        assertEquals(jsonObject.getValuesCount(), 1);
+
+        JsonObject secondLevelObject = jsonObject.getJsonObjectByName("first");
+        assertEquals(secondLevelObject.getValuesCount(), 1);
+
+        JsonObject thirdLevelObject = secondLevelObject.getJsonObjectByName("second");
+        assertEquals(thirdLevelObject.getValuesCount(), 1);
+        assertEquals(JsonObject.EMPTY, thirdLevelObject.getValueByName("third"));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testParseStringAsObjectInMemberValue() {
+        JsonParser jsonParser = new JsonParser("{ \"first\": \"string value\" }");
+        JsonObject jsonObject = jsonParser.parse();
+        jsonObject.getJsonObjectByName("first");
+    }
+
+    @Test
+    public void testStringAsPairValue() {
+        JsonParser jsonParser = new JsonParser("{ \"first\": \"string value\" }");
+        JsonObject jsonObject = jsonParser.parse();
+        assertEquals(jsonObject.getValuesCount(), 1);
+        assertEquals("string value", jsonObject.getValueByName("first"));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testMemberWithoutValue() {
         new JsonParser("{ \"first\": } }").parse();

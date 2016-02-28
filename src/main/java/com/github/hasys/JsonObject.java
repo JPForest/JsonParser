@@ -28,11 +28,11 @@ public class JsonObject {
      * @throws IllegalStateException if value of member is not a JsonObject
      */
     public JsonObject getJsonObjectByName(String name) {
-        Object o = values.get(name);
-        if (!(o instanceof JsonObject)) {
+        Object value = values.get(name);
+        if (!(value instanceof JsonObject)) {
             throw new IllegalStateException("Member " + name + " is not a JsonObject");
         }
 
-        return (JsonObject) o;
+        return (JsonObject) value;
     }
 }
