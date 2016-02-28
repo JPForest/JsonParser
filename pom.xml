@@ -6,7 +6,7 @@
 
   <groupId>com.github.hasys</groupId>
   <artifactId>JsonPars</artifactId>
-  <version>0.1.0-RELEASE</version>
+  <version>0.2.0-SNAPSHOT</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
