@@ -1,4 +1,6 @@
 # JsonParser
+[![Build Status](https://travis-ci.org/hasys/JsonParser.svg?branch=master)](https://travis-ci.org/hasys/JsonParser)
+
 JsonParser is a simple json parser written in Java™ programming language.
 
 Due to small releases good for learning purposes.
