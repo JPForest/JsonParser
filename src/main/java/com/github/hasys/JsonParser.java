@@ -39,35 +39,32 @@ public class JsonParser {
 
     private JsonObject parseObject() {
         if (parseNextToken() != JsonToken.START_OBJECT) {
-            throw new IllegalArgumentException(
-                    String.format("Unexpected token '%s' at position %s", currentToken(), currentPosition)
-            );
+            throw new IllegalArgumentException(unexpectedTokenPresentExpected(JsonToken.START_OBJECT));
         }
         currentPosition++;
 
         JsonObject jsonObject = new JsonObject();
         while (currentPosition < data.length()) {
-            JsonToken currentToken = parseNextToken();
+            switch (parseNextToken()) {
+                case STRING:
+                    String string = parseString();
+                    if (parseNextToken() != JsonToken.COLON) {
+                        throw new IllegalArgumentException(unexpectedTokenPresentExpected(JsonToken.COLON));
+                    }
+                    currentPosition++;
+                    Object value = parseValue();
+                    jsonObject.addValue(string, value);
+                    currentPosition++;
+                    break;
 
-            if (currentToken == JsonToken.STRING) {
-                String string = parseString();
-                if (parseNextToken() != JsonToken.COLON) {
-                    throw new IllegalArgumentException(
-                            String.format("Unexpected token '%s' at position %s", currentToken(), currentPosition)
-                    );
-                }
-                currentPosition++;
-                Object value = parseValue();
-                jsonObject.addValue(string, value);
-                currentPosition++;
-            } else if (currentToken == JsonToken.END_OBJECT) {
-                if (jsonObject.getValuesCount() == 0) {
-                    return JsonObject.EMPTY;
-                } else {
+                case END_OBJECT:
+                    if (jsonObject.getValuesCount() == 0) {
+                        return JsonObject.EMPTY;
+                    }
                     return jsonObject;
-                }
-            } else {
-                throw new IllegalArgumentException(data + System.lineSeparator() + " is not a valid json object");
+
+                default:
+                    throw new IllegalArgumentException(data + System.lineSeparator() + " is not a valid json object");
             }
         }
 
@@ -115,21 +112,27 @@ public class JsonParser {
     }
 
     protected String parseString() {
-        if (data.charAt(currentPosition) == '"') {
-            currentPosition++;
-            int start = currentPosition;
-            while (data.charAt(currentPosition) != '"') {
-                currentPosition++;
-            }
-            String string = data.substring(start, currentPosition);
-            currentPosition++;
-            return string;
-        } else {
-            throw new IllegalArgumentException("String token has to start with \" simbol.");
+        if (data.charAt(currentPosition) != '"') {
+            throw new IllegalArgumentException("String token has to start with \" symbol.");
         }
+        currentPosition++;
+
+        int start = currentPosition;
+        while (data.charAt(currentPosition) != '"') {
+            currentPosition++;
+        }
+        String string = data.substring(start, currentPosition);
+        currentPosition++;
+
+        return string;
     }
 
     private String unknownTokenErrorMessage() {
         return String.format("Unknown token '%s' at position %s", data.charAt(currentPosition), currentPosition);
+    }
+
+    private String unexpectedTokenPresentExpected(JsonToken expectedToken) {
+        return String.format("Unexpected token '%s' at position %s. Expected: '%s'.",
+                currentToken(), currentPosition, expectedToken);
     }
 }
