@@ -65,4 +65,33 @@ public class JsonParseTest {
         URI fileUri = classLoader.getResource("emptyObject.json").toURI();
         assertEquals(new JsonParser(fileUri).parse(), JsonObject.EMPTY);
     }
+
+    @Test
+    public void objectWithEmptyObjectValueTest() {
+        JsonParser jsonParser = new JsonParser("{ \"first\": {} }");
+        JsonObject jsonObject = jsonParser.parse();
+        assertEquals(jsonObject.getValuesCount(), 1);
+        assertEquals(jsonObject.getValueByName("first"), JsonObject.EMPTY);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void objectWithWrongValueTest() {
+        new JsonParser("{ \"first\": } }").parse();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void objectWithWrongValue2Test() {
+        new JsonParser("{ \"first\" {} }").parse();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void objectWithWrongValue3Test() {
+        new JsonParser("{ first: {} }").parse();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void objectWithWrongValue4Test() {
+        new JsonParser("first").parseString();
+    }
+
 }
